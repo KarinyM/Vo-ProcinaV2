@@ -1,0 +1,633 @@
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Vó Porcina - Gestão de Granja</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="sidebar">
+            <div class="logo">
+                <img src="assets/logo-vo-porcina.svg" alt="Logo Vó Porcina">
+            </div>
+            <ul class="menu">
+                <li data-page="dashboard">
+                    <i class="fas fa-chart-pie"></i> Dashboard
+                </li>
+                <li class="active" data-page="registro-diario">
+                    <i class="fas fa-calendar-day"></i> Registro Diário
+                </li>
+                <li data-page="funcionarios">
+                    <i class="fas fa-users"></i> Funcionários
+                </li>
+                <li data-page="pedidos">
+                    <i class="fas fa-clipboard-list"></i> Pedidos
+                </li>
+                <li data-page="venda-ovos">
+                    <i class="fas fa-egg"></i> Venda de Ovos
+                </li>
+                <li data-page="venda-racao">
+                    <i class="fas fa-shopping-bag"></i> Venda de Ração
+                </li>
+                <li data-page="ovos-comprados">
+                    <i class="fas fa-cart-plus"></i> Ovos Comprados
+                </li>
+                <li data-page="despesas">
+                    <i class="fas fa-money-bill-wave"></i> Despesas
+                </li>
+                <li data-page="estoque">
+                    <i class="fas fa-warehouse"></i> Estoque
+                </li>
+                <li data-page="relatorios">
+                    <i class="fas fa-file-alt"></i> Relatórios
+                </li>
+            </ul>
+        </nav>
+
+        <main class="content">
+            <header>
+                <h1 id="page-title">Registro Diário</h1>
+                <div class="user-info">
+                    <span>Bem-vindo, Administrador</span>
+                    <img src="assets/avatar-default.svg" alt="Avatar">
+                </div>
+            </header>
+
+            <section id="dashboard" class="page-section">
+                <div id="dashboard-stats">
+                    <div class="stat-card">
+                        <i class="fas fa-egg"></i>
+                        <h3>Total de Ovos Colhidos</h3>
+                        <p id="dashboard-ovos-colhidos" class="stat-value">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-warehouse"></i>
+                        <h3>Saldo de Ovos</h3>
+                        <p id="dashboard-estoque-ovos" class="stat-value">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-skull"></i>
+                        <h3>Galinhas Mortas</h3>
+                        <p id="dashboard-galinhas-mortas" class="stat-value">0</p>
+                    </div>
+                </div>
+
+                <div id="racao-stats">
+                    <h2>Consumo e Estoque de Ração</h2>
+                    <div class="racao-grid">
+                        <div class="racao-card">
+                            <h3>Crescimento</h3>
+                            <p id="dashboard-racao-crescimento-uso">0 kg usados</p>
+                            <p id="dashboard-racao-crescimento-estoque">0 kg em estoque</p>
+                            <div class="progress-bar">
+                                <div id="dashboard-racao-crescimento-progress" class="progress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="racao-card">
+                            <h3>Pico</h3>
+                            <p id="dashboard-racao-pico-uso">0 kg usados</p>
+                            <p id="dashboard-racao-pico-estoque">0 kg em estoque</p>
+                            <div class="progress-bar">
+                                <div id="dashboard-racao-pico-progress" class="progress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="racao-card">
+                            <h3>P1</h3>
+                            <p id="dashboard-racao-p1-uso">0 kg usados</p>
+                            <p id="dashboard-racao-p1-estoque">0 kg em estoque</p>
+                            <div class="progress-bar">
+                                <div id="dashboard-racao-p1-progress" class="progress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="registro-diario" class="page-section">
+                <div class="galpao-selector">
+                    <button class="galpao-btn active" data-galpao="1">Galpão 1</button>
+                    <button class="galpao-btn" data-galpao="2">Galpão 2</button>
+                    <button class="galpao-btn" data-galpao="3">Galpão 3</button>
+                    <button class="galpao-btn" data-galpao="4">Galpão 4</button>
+                </div>
+
+                <form id="registro-form">
+                    <div class="form-group">
+                        <label for="data-registro">Data:</label>
+                        <input type="date" id="data-registro" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Ração:</label>
+                        <div class="racao-checkboxes">
+                            <label>
+                                <input type="checkbox" name="racao" value="Crescimento"> Crescimento
+                            </label>
+                            <label>
+                                <input type="checkbox" name="racao" value="Pico"> Pico
+                            </label>
+                            <label>
+                                <input type="checkbox" name="racao" value="P1"> P1
+                            </label>
+                            <label>
+                                <input type="checkbox" name="racao" value="P2"> P2
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="quantidade-racao-container"></div>
+
+                    <div class="form-group">
+                        <label for="ovos-colhidos">Ovos Colhidos:</label>
+                        <input type="number" id="ovos-colhidos" min="0" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="galinhas-mortas">Galinhas Mortas:</label>
+                        <input type="number" id="galinhas-mortas" min="0" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="observacoes">Observações:</label>
+                        <textarea id="observacoes" rows="4"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-salvar">Salvar Registro</button>
+                </form>
+            </section>
+
+            <section id="funcionarios" class="page-section" style="display: none;">
+                <div class="funcionarios-container">
+                    <div class="funcionarios-add">
+                        <h2>Adicionar Funcionário</h2>
+                        <form id="adicionar-funcionario-form">
+                            <div class="form-group">
+                                <label for="nome-funcionario">Nome de Usuário:</label>
+                                <input type="text" id="nome-funcionario" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="senha-funcionario">Senha (apenas números):</label>
+                                <input type="password" id="senha-funcionario" pattern="[0-9]+" required>
+                            </div>
+                            <button type="submit" class="btn-salvar">Adicionar Funcionário</button>
+                        </form>
+                    </div>
+                    <div class="funcionarios-lista">
+                        <h2>Lista de Funcionários</h2>
+                        <table id="funcionarios-table">
+                            <thead>
+                                <tr>
+                                    <th>Nome de Usuário</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="funcionarios-tbody">
+                                <!-- Funcionários serão adicionados dinamicamente aqui -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="pedidos" class="page-section" style="display: none;">
+                <div class="pedidos-container">
+                    <div class="pedidos-add">
+                        <h2>Adicionar Pedido</h2>
+                        <form id="adicionar-pedido-form">
+                            <div class="form-group">
+                                <label for="data-entrega">Data de Entrega:</label>
+                                <input type="date" id="data-entrega" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="nome-cliente">Nome da Empresa/Pessoa:</label>
+                                <input type="text" id="nome-cliente" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="quantidade-ovos">Quantidade de Ovos:</label>
+                                <input type="number" id="quantidade-ovos" min="1" required>
+                            </div>
+                            <button type="submit" class="btn-salvar">Adicionar Pedido</button>
+                        </form>
+                    </div>
+                    <div class="pedidos-lista">
+                        <h2>Lista de Pedidos</h2>
+                        <table id="pedidos-table">
+                            <thead>
+                                <tr>
+                                    <th>Data Entrega</th>
+                                    <th>Cliente</th>
+                                    <th>Quantidade Ovos</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pedidos-tbody">
+                                <!-- Pedidos serão adicionados dinamicamente aqui -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="venda-ovos" class="page-section" style="display: none;">
+                <div class="venda-ovos-container">
+                    <div class="venda-ovos-add">
+                        <h2>Adicionar Venda de Ovos</h2>
+                        <form id="adicionar-venda-ovos-form">
+                            <div class="form-group">
+                                <label for="data-venda">Data da Venda:</label>
+                                <input type="date" id="data-venda" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="local-venda">Local de Venda:</label>
+                                <input type="text" id="local-venda" placeholder="Digite o local de venda" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="quantidade-ovos-venda">Quantidade de Ovos:</label>
+                                <input type="number" id="quantidade-ovos-venda" min="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="valor-unidade">Valor por Ovo (R$):</label>
+                                <input type="number" id="valor-unidade" step="0.01" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="valor-total">Valor Total da Venda (R$):</label>
+                                <input type="number" id="valor-total" step="0.01" min="0" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label>Forma de Pagamento:</label>
+                                <div class="pagamento-options">
+                                    <label>
+                                        <input type="radio" name="forma-pagamento" value="a-vista" required> À Vista
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="forma-pagamento" value="cartao"> Cartão
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="forma-pagamento" value="boleto"> Boleto
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="data-boleto-container" style="display: none;" class="form-group">
+                                <label for="data-boleto">Data do Boleto:</label>
+                                <input type="date" id="data-boleto">
+                            </div>
+                            <button type="submit" class="btn-salvar">Registrar Venda</button>
+                        </form>
+                    </div>
+                    <div class="vendas-ovos-lista">
+                        <h2>Histórico de Vendas de Ovos</h2>
+                        <table id="vendas-ovos-table">
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Local</th>
+                                    <th>Quantidade</th>
+                                    <th>Valor Total</th>
+                                    <th>Pagamento</th>
+                                </tr>
+                            </thead>
+                            <tbody id="vendas-ovos-tbody">
+                                <!-- Vendas serão adicionadas dinamicamente aqui -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="venda-racao" class="page-section" style="display: none;">
+                <div class="venda-racao-container">
+                    <div class="venda-racao-add">
+                        <h2>Adicionar Venda de Ração</h2>
+                        <form id="adicionar-venda-racao-form">
+                            <div class="form-group">
+                                <label for="data-venda-racao">Data da Venda:</label>
+                                <input type="date" id="data-venda-racao" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="local-venda-racao">Local/Nome de Venda:</label>
+                                <input type="text" id="local-venda-racao" placeholder="Digite o local/nome de venda" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="tipo-racao">Tipo de Ração:</label>
+                                <select id="tipo-racao" required>
+                                    <option value="">Selecione o Tipo</option>
+                                    <option value="Crescimento">Crescimento</option>
+                                    <option value="Pico">Pico</option>
+                                    <option value="P1">P1</option>
+                                    <option value="P2">P2</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="quantidade-racao-venda">Quantidade de Ração (kg):</label>
+                                <input type="number" id="quantidade-racao-venda" step="0.1" min="0.1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="valor-racao-unidade">Valor por kg (R$):</label>
+                                <input type="number" id="valor-racao-unidade" step="0.01" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="valor-total-racao">Valor Total da Venda (R$):</label>
+                                <input type="number" id="valor-total-racao" step="0.01" min="0" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label>Forma de Pagamento:</label>
+                                <div class="pagamento-options">
+                                    <label>
+                                        <input type="radio" name="forma-pagamento-racao" value="a-vista" required> À Vista
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="forma-pagamento-racao" value="cartao"> Cartão
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="forma-pagamento-racao" value="boleto"> Boleto
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="data-boleto-racao-container" style="display: none;" class="form-group">
+                                <label for="data-boleto-racao">Data do Boleto:</label>
+                                <input type="date" id="data-boleto-racao">
+                            </div>
+                            <button type="submit" class="btn-salvar">Registrar Venda de Ração</button>
+                        </form>
+                    </div>
+                    <div class="vendas-racao-lista">
+                        <h2>Histórico de Vendas de Ração</h2>
+                        <table id="vendas-racao-table">
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Local</th>
+                                    <th>Tipo</th>
+                                    <th>Quantidade</th>
+                                    <th>Valor Total</th>
+                                    <th>Pagamento</th>
+                                </tr>
+                            </thead>
+                            <tbody id="vendas-racao-tbody">
+                                <!-- Vendas serão adicionadas dinamicamente aqui -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="ovos-comprados" class="page-section" style="display: none;">
+                <div class="ovos-comprados-container">
+                    <div class="ovos-comprados-add">
+                        <h2>Adicionar Compra de Ovos</h2>
+                        <form id="adicionar-ovos-comprados-form">
+                            <div class="form-group">
+                                <label for="data-compra-ovos">Data da Compra:</label>
+                                <input type="date" id="data-compra-ovos" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="nome-fornecedor">Nome da Empresa/Pessoa:</label>
+                                <input type="text" id="nome-fornecedor" placeholder="Digite o nome do fornecedor" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="quantidade-ovos-comprados">Quantidade de Ovos:</label>
+                                <input type="number" id="quantidade-ovos-comprados" min="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="valor-unidade-ovo-comprado">Valor por Ovo (R$):</label>
+                                <input type="number" id="valor-unidade-ovo-comprado" step="0.01" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="valor-total-ovos-comprados">Valor Total da Compra (R$):</label>
+                                <input type="number" id="valor-total-ovos-comprados" step="0.01" min="0" readonly>
+                            </div>
+                            <button type="submit" class="btn-salvar">Registrar Compra de Ovos</button>
+                        </form>
+                    </div>
+                    <div class="ovos-comprados-lista">
+                        <h2>Histórico de Compras de Ovos</h2>
+                        <table id="ovos-comprados-table">
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Fornecedor</th>
+                                    <th>Quantidade</th>
+                                    <th>Valor Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ovos-comprados-tbody">
+                                <!-- Compras de ovos serão adicionadas dinamicamente aqui -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="despesas" class="page-section" style="display: none;">
+                <div class="despesas-container">
+                    <div class="despesas-add">
+                        <h2>Adicionar Despesa</h2>
+                        <form id="adicionar-despesa-form">
+                            <div class="form-group">
+                                <label for="data-despesa">Data da Despesa:</label>
+                                <input type="date" id="data-despesa" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="produto-despesa">Produto/Local:</label>
+                                <input type="text" id="produto-despesa" placeholder="Digite o produto ou local da despesa" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="quantidade-despesa">Quantidade do Produto:</label>
+                                <input type="number" id="quantidade-despesa" step="0.1" min="0.1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="valor-unidade-despesa">Valor por Unidade (R$):</label>
+                                <input type="number" id="valor-unidade-despesa" step="0.01" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="valor-total-despesa">Valor Total da Despesa (R$):</label>
+                                <input type="number" id="valor-total-despesa" step="0.01" min="0" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label>Forma de Pagamento:</label>
+                                <div class="pagamento-options">
+                                    <label>
+                                        <input type="radio" name="forma-pagamento-despesa" value="a-vista" required> À Vista
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="forma-pagamento-despesa" value="cartao"> Cartão
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="forma-pagamento-despesa" value="boleto"> Boleto
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="data-boleto-despesa-container" style="display: none;" class="form-group">
+                                <label for="data-boleto-despesa">Data do Boleto:</label>
+                                <input type="date" id="data-boleto-despesa">
+                            </div>
+                            <button type="submit" class="btn-salvar">Registrar Despesa</button>
+                        </form>
+                    </div>
+                    <div class="despesas-lista">
+                        <h2>Histórico de Despesas</h2>
+                        <table id="despesas-table">
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Produto/Local</th>
+                                    <th>Quantidade</th>
+                                    <th>Valor Total</th>
+                                    <th>Pagamento</th>
+                                </tr>
+                            </thead>
+                            <tbody id="despesas-tbody">
+                                <!-- Despesas serão adicionadas dinamicamente aqui -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="estoque" class="page-section" style="display: none;">
+                <div class="estoque-container">
+                    <div class="estoque-racao">
+                        <h2>Estoque de Ração</h2>
+                        <form id="adicionar-estoque-racao-form">
+                            <div class="form-group">
+                                <label>Tipo de Ração:</label>
+                                <div class="racao-checkboxes">
+                                    <label>
+                                        <input type="checkbox" name="racao-estoque" value="Crescimento"> Crescimento
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" name="racao-estoque" value="Pico"> Pico
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" name="racao-estoque" value="P1"> P1
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" name="racao-estoque" value="P2"> P2
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="quantidade-racao-estoque-container"></div>
+                            <button type="submit" class="btn-salvar">Adicionar Estoque de Ração</button>
+                        </form>
+
+                        <div class="estoque-racao-atual">
+                            <h3>Estoque Atual de Ração</h3>
+                            <table id="estoque-racao-table">
+                                <thead>
+                                    <tr>
+                                        <th>Tipo de Ração</th>
+                                        <th>Quantidade (kg)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="estoque-racao-tbody">
+                                    <!-- Estoque de ração será adicionado dinamicamente aqui -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="estoque-ovos">
+                        <h2>Estoque de Ovos</h2>
+                        <form id="adicionar-estoque-ovos-form">
+                            <div class="form-group">
+                                <label for="quantidade-ovos-estoque">Quantidade de Ovos:</label>
+                                <input type="number" id="quantidade-ovos-estoque" min="0" required>
+                            </div>
+                            <button type="submit" class="btn-salvar">Adicionar Estoque de Ovos</button>
+                        </form>
+
+                        <div class="estoque-ovos-atual">
+                            <h3>Estoque Atual de Ovos</h3>
+                            <div id="estoque-ovos-total">
+                                <!-- Estoque de ovos será adicionado dinamicamente aqui -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="relatorios" class="page-section" style="display: none;">
+                <div class="relatorios-container">
+                    <div class="relatorios-filtros">
+                        <h2>Relatórios</h2>
+                        
+                        <div class="form-group">
+                            <label>Tipo de Relatório:</label>
+                            <select id="tipo-relatorio">
+                                <option value="registro-diario">Registro Diário</option>
+                                <option value="venda-ovos">Venda de Ovos</option>
+                                <option value="venda-racao">Venda de Ração</option>
+                                <option value="pedidos">Pedidos</option>
+                                <option value="despesas">Despesas</option>
+                                <option value="ovos-comprados">Ovos Comprados</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Galpão:</label>
+                            <select id="galpao-relatorio">
+                                <option value="todos">Todos os Galpões</option>
+                                <option value="1">Galpão 1</option>
+                                <option value="2">Galpão 2</option>
+                                <option value="3">Galpão 3</option>
+                                <option value="4">Galpão 4</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Período:</label>
+                            <select id="periodo-relatorio">
+                                <option value="semanal">Semanal</option>
+                                <option value="mensal">Mensal</option>
+                                <option value="trimestral">Trimestral</option>
+                                <option value="anual">Anual</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Data Inicial:</label>
+                            <input type="date" id="data-inicial">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Data Final:</label>
+                            <input type="date" id="data-final">
+                        </div>
+
+                        <button id="gerar-relatorio" class="btn-salvar">Gerar Relatório</button>
+                        <button id="exportar-relatorio" class="btn-exportar">Exportar para Excel</button>
+                    </div>
+
+                    <div class="relatorios-graficos">
+                        <h3>Gráficos</h3>
+                        <div id="grafico-ração" class="grafico"></div>
+                        <div id="grafico-ovos" class="grafico"></div>
+                        <div id="grafico-galinhas-mortas" class="grafico"></div>
+                    </div>
+
+                    <div class="relatorios-tabela">
+                        <h3>Dados do Relatório</h3>
+                        <table id="tabela-relatorios">
+                            <thead>
+                                <tr>
+                                    <!-- Cabeçalho dinâmico -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Dados do relatório serão inseridos dinamicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
